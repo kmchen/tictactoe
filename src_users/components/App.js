@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { store } from "../store";
 import "../stylesheets/main.scss";
 
-function Square(props) {
+export function Square(props) {
   return (
       <button className="square" onClick={props.onClick}>
           {props.value}
@@ -11,7 +11,7 @@ function Square(props) {
       );
 }
 
-class Board extends React.Component {
+export class Board extends React.Component {
   renderSquare(i) {
     const stats = store.getState();
     const {moves: {status}} = stats;
@@ -48,7 +48,8 @@ class Board extends React.Component {
 export class App extends React.Component {
   constructor() {
     super();
-    this.state = { player: 0, winner: null };
+    // player 0 => "O", player 1 => "X"
+    this.state = { player: 0, winning: null, winner: null };
   }
 
   handleClick(i) {
@@ -57,12 +58,6 @@ export class App extends React.Component {
     this.setState({
       player: !this.state.player
     }, this.isWinning());
-  }
-
-  componentDidUpdate() {
-    if (this.state.winner) {
-      console.log('We have got a winniner');
-    }
   }
 
   isWinning() {
@@ -82,7 +77,7 @@ export class App extends React.Component {
         const [val1, val2, val3] = val;
         if( status[val1] && status[val2] && status[val3] && 
             status[val1] === status[val2] && status[val1] === status[val3]) {
-          this.state.winner = true;
+          this.setState({winning: true, winner: status[val1]});
           return;
         } 
       })
@@ -90,13 +85,21 @@ export class App extends React.Component {
 
   render() {
     return (
-        <div className="game">
-            <div className="game-board">
-                <Board onClick={i => this.handleClick(i)} />
+        <div>
+            <div className="game">
+                <div style={{paddingRight: '10px'}} className="game-board">
+                    <Board onClick={i => this.handleClick(i)} />
+                </div>
+                <div>
+                    <div> Player 0 : O</div>
+                    <div> Player 1 : X</div>
+                </div>
             </div>
+            <p/>
+            <div>Winner: {this.state.winner}</div>
         </div>
         );
-}
+  }
 }
 
 // export the connected class
