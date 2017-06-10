@@ -44,7 +44,7 @@ export class Board extends React.Component {
         );
   }
 }
-// App component
+
 export class App extends React.Component {
   constructor() {
     super();
