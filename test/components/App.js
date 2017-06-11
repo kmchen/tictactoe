@@ -11,27 +11,124 @@ global.document = doc
 global.window = doc.defaultView
 
 it('Initialize 9 empty squares', () => {
-    store.dispatch({type: 'MAKE_MOVE', payload: {position: 0, result: "x"}})
     const wrapper = mount(<App />);
     expect(wrapper.find('.square')).to.have.length(9);
 });
 
-it('renders the winner', () => {
-    store.dispatch({type: 'MAKE_MOVE', payload: {position: 0, result: "X"}})
-    store.dispatch({type: 'MAKE_MOVE', payload: {position: 1, result: "O"}})
-    store.dispatch({type: 'MAKE_MOVE', payload: {position: 4, result: "X"}})
-    store.dispatch({type: 'MAKE_MOVE', payload: {position: 2, result: "O"}})
-    store.dispatch({type: 'MAKE_MOVE', payload: {position: 8, result: "X"}})
+it('winning backslash diagonals', () => {
+    store.dispatch({type: 'INCREASE_GRID', payload: {
+      status: [ Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null)
+      ]}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 0, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 1, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 3, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 4, result: "X"}})
     const wrapper = mount(<App />);
-    const getChildProps = child => wrapper.find('.square').at(child).props().children
-    expect(getChildProps(0)).to.be.equal("X");
-    expect(getChildProps(4)).to.be.equal("X");
-    expect(getChildProps(8)).to.be.equal("X");
-    expect(getChildProps(1)).to.be.equal("O");
-    expect(getChildProps(2)).to.be.equal("O");
-
-    wrapper.instance().isWinning();
+    wrapper.instance().isWinning(4, 4);
     const appState = wrapper.state();
-    expect(appState.winning).to.be.equal(true);
     expect(appState.winner).to.be.equal("X");
+});
+
+it('winning slash diagonals', () => {
+    store.dispatch({type: 'INCREASE_GRID', payload: {
+      status: [ Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null)
+      ]}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 4, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 3, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 1, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 0, result: "X"}})
+    const wrapper = mount(<App />);
+    wrapper.instance().isWinning(4, 0);
+    const appState = wrapper.state();
+    expect(appState.winner).to.be.equal("X");
+});
+
+it('winning horizonally', () => {
+    store.dispatch({type: 'INCREASE_GRID', payload: {
+      status: [ Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null)
+      ]}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 0, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 1, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 3, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 4, result: "X"}})
+    const wrapper = mount(<App />);
+    wrapper.instance().isWinning(0, 4);
+    const appState = wrapper.state();
+    expect(appState.winner).to.be.equal("X");
+});
+
+it('winning vertically', () => {
+    store.dispatch({type: 'INCREASE_GRID', payload: {
+      status: [ Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null),
+                Array(5).fill(null)
+      ]}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 0, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 3, col: 2, result: "X"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 0, result: "O"}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 4, col: 2, result: "X"}})
+    const wrapper = mount(<App />);
+    wrapper.instance().isWinning(4, 2);
+    const appState = wrapper.state();
+    expect(appState.winner).to.be.equal("X");
+});
+
+it('getSlash function', () => {
+    store.dispatch({type: 'INCREASE_GRID', payload: {
+      status: [ Array(3).fill(null),
+                Array(3).fill(null),
+                Array(3).fill(null),
+      ]}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 1, col: 1, result: "X"}})
+    const wrapper = mount(<App />);
+    const matrix = store.getState()['moves']['status'];
+    const diagonalSlashMatrix = wrapper.instance().getSlash(matrix, 1, 1);
+    expect(diagonalSlashMatrix).to.deep.equal([null, "X", null]);
+});
+
+it('getBackSlash function', () => {
+    store.dispatch({type: 'INCREASE_GRID', payload: {
+      status: [ Array(3).fill(null),
+                Array(3).fill(null),
+                Array(3).fill(null),
+      ]}})
+    store.dispatch({type: 'MAKE_MOVE', payload: {row: 2, col: 2, result: "X"}})
+    const wrapper = mount(<App />);
+    const matrix = store.getState()['moves']['status'];
+    const diagonalSlashMatrix = wrapper.instance().getBackSlash(matrix, 2, 2);
+    expect(diagonalSlashMatrix).to.deep.equal([null, null, "X"]);
 });

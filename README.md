@@ -2,7 +2,7 @@
 
 # Getting started
 
-1. Once your environment is prepared, open a command prompt (terminal) and type in the following:
+1. Open a command prompt (terminal) and type in the following:
 
     ```sh
     git clone https://github.com/kmchen/tictactoe
@@ -11,3 +11,9 @@
     ```
 
 2. Then open your [http://localhost:8080/]
+
+3. To run test:
+
+    ```sh
+    npm test
+    ```
